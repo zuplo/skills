@@ -1,0 +1,90 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Version bump type"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine next version
+        id: version
+        run: |
+          # Get the latest version tag, default to v0.0.0 if none exist
+          latest=$(git tag -l 'v*' --sort=-v:refname | head -1)
+          if [ -z "$latest" ]; then
+            latest="v0.0.0"
+          fi
+
+          # Strip the v prefix and split
+          version="${latest#v}"
+          IFS='.' read -r major minor patch <<< "$version"
+
+          case "${{ inputs.bump }}" in
+            major)
+              major=$((major + 1))
+              minor=0
+              patch=0
+              ;;
+            minor)
+              minor=$((minor + 1))
+              patch=0
+              ;;
+            patch)
+              patch=$((patch + 1))
+              ;;
+          esac
+
+          next="v${major}.${minor}.${patch}"
+          echo "tag=$next" >> "$GITHUB_OUTPUT"
+          echo "version=${major}.${minor}.${patch}" >> "$GITHUB_OUTPUT"
+          echo "Next version: $next (from $latest, bump: ${{ inputs.bump }})"
+
+      - name: Sync skill metadata
+        run: ./scripts/sync-skill-metadata.sh
+
+      - name: Update marketplace.json version
+        run: |
+          python3 -c "
+          import json
+          with open('.claude-plugin/marketplace.json', 'r') as f:
+              data = json.load(f)
+          data['metadata']['version'] = '${{ steps.version.outputs.version }}'
+          with open('.claude-plugin/marketplace.json', 'w') as f:
+              json.dump(data, f, indent=2)
+              f.write('\n')
+          "
+
+      - name: Commit and tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Release ${{ steps.version.outputs.tag }}"
+            git push
+          fi
+          git tag "${{ steps.version.outputs.tag }}"
+          git push origin "${{ steps.version.outputs.tag }}"
+          echo "Created tag: ${{ steps.version.outputs.tag }}"

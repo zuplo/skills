@@ -10,14 +10,14 @@
   "plugins": [
     {
       "name": "zuplo-skills",
-      "description": "Official Zuplo API gateway skills. Includes guides for gateway configuration, project setup, policies, handlers, monetization, and CLI usage. Best used with the Zuplo docs MCP server at https://mcp.inkeep.com/zuplo/mcp.",
+      "description": "Official Zuplo API gateway skills. Includes guides for gateway configuration, project setup, policies, handlers, monetization, and CLI usage.",
       "skills": [
+        "./skills/zuplo-cli",
         "./skills/zuplo-guide",
-        "./skills/zuplo-project-setup",
-        "./skills/zuplo-policies",
         "./skills/zuplo-handlers",
         "./skills/zuplo-monetization",
-        "./skills/zuplo-cli"
+        "./skills/zuplo-policies",
+        "./skills/zuplo-project-setup"
       ],
       "source": "./",
       "strict": false
