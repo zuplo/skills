@@ -32,17 +32,14 @@ Use this skill when the user:
 
 ## Prerequisites
 
-The Zuplo CLI requires Node.js 20+ (Node.js 22 recommended). Install globally:
+The Zuplo CLI requires Node.js 20+ (Node.js 22 recommended). The `zuplo` package is included as a dependency in Zuplo projects — there is no need to install it globally. Run CLI commands using your package manager's exec command:
 
 ```bash
-npm install -g zuplo
+npx zuplo <command>    # npm
+pnpx zuplo <command>   # pnpm
 ```
 
-Update to latest:
-
-```bash
-npm install -g zuplo@latest
-```
+> **Note:** All `zuplo` commands shown below should be run via `npx zuplo`, `pnpx zuplo`, or equivalent. The `zuplo` prefix is shown without `npx` for brevity.
 
 ## Authentication
 
@@ -145,17 +142,6 @@ zuplo docs --server-url http://localhost:9000        # Point to local API
 ```
 
 ### Project Management
-
-#### `zuplo init`
-
-Initialize a Zuplo project on the platform (creates project and deploys initial environment).
-
-```bash
-zuplo init                                              # Interactive prompts
-zuplo init my-api                                       # Specify directory
-zuplo init --with-account my-acct --with-project my-api # Pre-select account/project
-zuplo init -y                                           # Use all defaults
-```
 
 #### `zuplo link`
 
@@ -431,28 +417,28 @@ export ZUPLO_DO_NOT_TRACK=1
 ```bash
 npx create-zuplo-api@latest my-api
 cd my-api
-zuplo login
-zuplo init
-zuplo dev
+npx zuplo login
+npx zuplo init
+npx zuplo dev
 ```
 
 ### Deploy from CI/CD
 
 ```bash
 export ZUPLO_API_KEY=zpka_xxxxx
-zuplo deploy --environment production
+npx zuplo deploy --environment production
 ```
 
 ### Connect local dev to remote services
 
 ```bash
-zuplo link    # Select account, project, environment
-zuplo dev     # Now has access to API keys, rate limiting, etc.
+npx zuplo link    # Select account, project, environment
+npx zuplo dev     # Now has access to API keys, rate limiting, etc.
 ```
 
 ### Import an existing OpenAPI spec
 
 ```bash
-zuplo openapi merge --source ./my-api-spec.yaml
-zuplo dev
+npx zuplo openapi merge --source ./my-api-spec.yaml
+npx zuplo dev
 ```

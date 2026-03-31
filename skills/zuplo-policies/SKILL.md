@@ -1,6 +1,6 @@
 ---
 name: zuplo-policies
-description: Manage policies on Zuplo API gateway routes. Use when the user wants to add, configure, reorder, or remove authentication, rate limiting, request/response transformation, validation, or any other policy in their Zuplo project. Covers built-in policy configuration, custom code policies, and wiring policies to routes. Includes a complete built-in policy catalog with default configurations.
+description: Manage policies on Zuplo API gateway routes. Use when the user wants to add, create, configure, reorder, or remove authentication, rate limiting, request/response transformation, validation, or any other policy in their Zuplo project. Covers built-in policy configuration, custom code policies, and wiring policies to routes. Includes a complete built-in policy catalog with default configurations.
 license: MIT
 metadata:
   author: Zuplo
