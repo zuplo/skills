@@ -113,9 +113,6 @@ If local docs aren't available and MCP is not configured, skills fall back to fe
 | Skill | Description |
 | ----- | ----------- |
 | **zuplo-guide** | Comprehensive gateway guide — documentation lookup, request pipeline, route/policy configuration, custom handlers, deployment. Start here for general Zuplo development. |
-| **zuplo-project-setup** | Step-by-step new project setup — scaffolding, routes, auth, rate limiting, CORS, env vars, backend security, dev portal, deployment. |
-| **zuplo-policies** | Policy configuration — built-in policy catalog, custom code policies, wiring policies to routes. |
-| **zuplo-handlers** | Request handlers — URL forwarding/rewriting, redirects, custom TypeScript handlers, Lambda, WebSockets, MCP servers. |
 | **zuplo-monetization** | API monetization — meters, plans, Stripe billing, subscriptions, usage tracking, private plans, tax collection. |
 | **zuplo-cli** | CLI reference — local dev, deployment, env vars, tunnels, OpenAPI tools, mTLS, project management. |
 
