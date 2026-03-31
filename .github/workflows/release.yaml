@@ -16,15 +16,51 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Extract version from tag
+        id: version
+        run: |
+          tag="${{ github.ref_name }}"
+          version="${tag#v}"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Version: $version"
+
+      - name: Sync skill metadata
+        run: ./scripts/sync-skill-metadata.sh
+
+      - name: Update marketplace.json version
+        run: |
+          python3 -c "
+          import json
+          with open('.claude-plugin/marketplace.json', 'r') as f:
+              data = json.load(f)
+          data['metadata']['version'] = '${{ steps.version.outputs.version }}'
+          with open('.claude-plugin/marketplace.json', 'w') as f:
+              json.dump(data, f, indent=2)
+              f.write('\n')
+          "
+
+      - name: Commit metadata updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Metadata already up to date"
+          else
+            git commit -m "Update metadata for ${{ github.ref_name }}"
+            git push origin HEAD:main
+            # Move the tag to the new commit
+            git tag -f "${{ github.ref_name }}"
+            git push origin "${{ github.ref_name }}" --force
+          fi
+
       - name: Build release artifacts
         run: |
           RELEASE_URL="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}"
           ./scripts/build-release.sh "$RELEASE_URL"
 
       - name: Prepare release assets
-        id: assets
         run: |
-          # Flatten skill-md files for upload (rename to {name}-SKILL.md)
           for dir in dist/*/; do
             [ -d "$dir" ] || continue
             name=$(basename "$dir")
@@ -35,7 +71,6 @@ jobs:
 
       - name: Create GitHub Release
         run: |
-          # Collect all release files (tar.gz, SKILL.md, index.json)
           files=()
           for f in dist/*.tar.gz dist/*-SKILL.md dist/index.json; do
             [ -f "$f" ] && files+=("$f")
