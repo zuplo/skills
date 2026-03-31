@@ -10,8 +10,8 @@ Register this repo as a plugin marketplace, then install the skills:
 
 ```
 /plugin marketplace add zuplo/skills
-/plugin install zuplo-skills@zuplo-agent-skills
-/plugin install zudoku-skills@zuplo-agent-skills
+/plugin install zuplo-skills@zuplo-tools
+/plugin install zudoku-skills@zuplo-tools
 ```
 
 ### Cursor
@@ -96,7 +96,7 @@ For **Claude Code**, add to `.claude/settings.json`:
   "mcpServers": {
     "zuplo-docs": {
       "type": "http",
-      "url": "https://mcp.inkeep.com/zuplo/mcp"
+      "url": "https://dev.zuplo.com/mcp/docs"
     }
   }
 }

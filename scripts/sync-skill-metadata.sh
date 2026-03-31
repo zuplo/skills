@@ -81,7 +81,7 @@ python3 -c "
 import json
 
 data = {
-    'name': 'zuplo-agent-skills',
+    'name': 'zuplo-tools',
     'owner': {
         'name': 'Zuplo',
         'email': 'support@zuplo.com'
