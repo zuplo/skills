@@ -1,7 +1,7 @@
 ---
-name: zuplo
+name: zuplo-guide
 description: "Comprehensive Zuplo API gateway guide. Teaches how to find current documentation, understand the request pipeline, configure routes and policies, write custom handlers, and manage deployments. Covers documentation lookup strategies (llms.txt, individual doc pages), core concepts (OpenAPI-as-config, policy pipeline, web standards runtime), and all built-in policies. Use this skill for all Zuplo development to ensure correct configuration from official docs."
-license: Apache-2.0
+license: MIT
 metadata:
   author: Zuplo
   version: "1.0.0"
@@ -18,26 +18,29 @@ Before configuring ANY Zuplo feature (policies, handlers, routes, CORS, rate lim
 
 If you skip this step and produce incorrect configuration, it will break the user's project.
 
-## Documentation lookup guide
+## How to look up Zuplo documentation
 
-### Quick reference
+Use the following sources in priority order:
 
-| User Question                        | First Check                                                      | How To                                              |
-| ------------------------------------ | ---------------------------------------------------------------- | --------------------------------------------------- |
-| "How do I configure X?"             | [`references/docs-lookup.md`](references/docs-lookup.md)         | Fetch specific doc page from `zuplo.com/docs/`      |
-| "What policies are available?"      | [`references/policies.md`](references/policies.md)               | List policies and fetch configuration details       |
-| "How does the request pipeline work?"| [`references/concepts.md`](references/concepts.md)               | Core architecture and runtime concepts              |
-| "How do I write a handler?"         | [`references/concepts.md`](references/concepts.md)               | Handler signatures and built-in handlers            |
-| "How do I set up auth?"             | [`references/policies.md`](references/policies.md)               | Auth policies with doc page lookup                  |
+1. **Local docs (preferred):** The `zuplo` npm package bundles full documentation. Look for docs at `node_modules/zuplo/docs/` (check both the project root and parent directories for monorepos or hoisted installs). These are version-matched and always available offline.
 
-### How to find the right documentation
+2. **MCP server tools:** If the Zuplo MCP server is connected, use `search-zuplo-docs` and `ask-question-about-zuplo` (may be prefixed, e.g. `mcp__*Zuplo*__search-zuplo-docs`).
 
-1. **Fetch the doc index** at `https://zuplo.com/docs/llms.txt` to discover all available pages
-2. **Find the relevant page** for the feature you need to configure
-3. **Fetch that page** to get the correct configuration format, required fields, and examples
-4. **For policies specifically**, you can also use the policy catalog at `https://cdn.zuplo.com/portal/policies.v5.json` for machine-readable policy definitions
+3. **Fetch docs via URL:** Fetch `https://zuplo.com/docs/llms.txt` for a page index, then fetch individual pages. Policy catalog: `https://cdn.zuplo.com/portal/policies.v5.json`.
 
-More details: [`references/docs-lookup.md`](references/docs-lookup.md)
+### Local docs quick reference
+
+| Topic | Path in `node_modules/zuplo/docs/` |
+| ----- | ---------------------------------- |
+| Concepts (request lifecycle, project structure) | `concepts/` |
+| Policies (index + per-policy config/schema) | `policies/_index.md`, `policies/{policy-id}/doc.md`, `policies/{policy-id}/schema.json` |
+| Handlers (URL forward, rewrite, custom, etc.) | `handlers/` |
+| Articles (CORS, env vars, auth, deployment) | `articles/` |
+| CLI reference | `cli/` |
+| Monetization | `articles/monetization/` |
+| Developer portal / Zudoku | `dev-portal/` |
+| Programmable API reference | `programmable-api/` |
+| Guides | `guides/` |
 
 ## Core concepts (summary)
 
@@ -79,26 +82,18 @@ import {
 } from "@zuplo/runtime";
 ```
 
-For full details on handlers, runtime objects, caching, authentication, and deployment models, see [`references/concepts.md`](references/concepts.md).
+For full details on handlers, runtime objects, caching, authentication, and deployment models, read the docs in `node_modules/zuplo/docs/concepts/`.
 
 ## When you see errors
 
-1. Fetch the relevant doc page for the feature causing the error
+1. Read the relevant doc page for the feature causing the error (check `node_modules/zuplo/docs/` first)
 2. Verify configuration matches the documented format exactly
 3. Check that all required fields are present
 4. For build failures, check deployment logs for specific error messages
 
 ## Development workflow
 
-1. **Read the docs** for the feature you're configuring
-   - Use [`references/docs-lookup.md`](references/docs-lookup.md) to find the right page
-2. **Check available policies** if adding middleware
-   - Use [`references/policies.md`](references/policies.md) to discover and configure policies
+1. **Read the docs** for the feature you're configuring — check `node_modules/zuplo/docs/` or use MCP tools
+2. **Check available policies** — read `node_modules/zuplo/docs/policies/_index.md` for the full list, then the specific policy's `doc.md` for configuration
 3. **Write configuration** based on current docs (never from memory)
 4. **Verify the build** succeeded after saving changes
-
-## Resources
-
-- **Documentation lookup**: [`references/docs-lookup.md`](references/docs-lookup.md) — How to find and fetch Zuplo docs
-- **Policy guide**: [`references/policies.md`](references/policies.md) — Discovering and configuring policies
-- **Core concepts**: [`references/concepts.md`](references/concepts.md) — Full platform architecture reference

@@ -1,7 +1,7 @@
 ---
-name: zudoku
+name: zudoku-guide
 description: "Comprehensive Zudoku framework guide. Teaches how to find current documentation, verify API signatures, and build API documentation sites and developer portals. Covers documentation lookup strategies (embedded docs, remote docs), core concepts (configuration, navigation, OpenAPI integration, plugins, authentication, theming), and common patterns. Use this skill for all Zudoku development to ensure you're using current APIs from the installed version or latest documentation."
-license: Apache-2.0
+license: MIT
 metadata:
   author: Zuplo
   version: "2.0.0"
@@ -11,6 +11,10 @@ metadata:
 # Zudoku Framework Guide
 
 Build beautiful API documentation sites and developer portals with Zudoku. This skill teaches you how to find current documentation and configure Zudoku projects.
+
+<important>
+The Zudoku framework is an open source project built on top of vite. However, it is also used as the underlying framework for Zuplo's developer portal/documentation product. This means that all the documentation and knowledge about how to use Zudoku is also applicable to building documentation sites with Zuplo. If you are building a documentation site with Zuplo, you can use the same Zudoku configuration and concepts covered in this skill, but you will deploy it using Zuplo's platform instead of hosting it yourself. End users may refer to Zudoku as "developer portal", "API documentation site", or "docs site", but the underlying framework is Zudoku. This skill focuses on teaching you how to use Zudoku effectively, which will directly translate to building powerful documentation sites with Zuplo.
+</important>
 
 ## Prerequisites
 

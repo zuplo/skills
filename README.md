@@ -1,65 +1,91 @@
 # Zuplo Agent Skills
 
-Official agent skills for [Zuplo](https://zuplo.com) and [Zudoku](https://zudoku.dev). Includes skills for the Zuplo API gateway and the Zudoku documentation framework.
+Official [agent skills](https://agentskills.io) for [Zuplo](https://zuplo.com) and [Zudoku](https://zudoku.dev). These skills help AI coding assistants correctly configure and develop with the Zuplo API gateway and the Zudoku documentation framework.
 
 ## Installation
+
+Install from GitHub:
 
 ```bash
 npx skills add zuplo/skills
 ```
 
-Zudoku also supports the [`.well-known` skills discovery standard](https://github.com/cloudflare/agent-skills-discovery-rfc):
+Or via [`.well-known` discovery](https://github.com/cloudflare/agent-skills-discovery-rfc):
 
 ```bash
+npx skills add https://zuplo.com/
 npx skills add https://zudoku.dev/
 ```
 
-## Included skills
-
-### zuplo
-
-Comprehensive skill for all Zuplo API gateway development. Uses progressive disclosure with reference files covering:
-
-- **Documentation Lookup** (`references/docs-lookup.md`): How to find and fetch Zuplo docs (`llms.txt`, individual pages)
-- **Policy Guide** (`references/policies.md`): Discovering, understanding, and configuring all built-in policies
-- **Core Concepts** (`references/concepts.md`): Full platform architecture — request pipeline, handlers, runtime objects, caching, auth, deployment
-
-Main skill file teaches the documentation-first workflow and routes to appropriate reference files.
-
-### zudoku
-
-Single comprehensive skill for all Zudoku development. Uses progressive disclosure with reference files covering:
-
-- **Setup & Installation** (`references/create-zudoku.md`): CLI and manual project setup
-- **Embedded Docs Lookup** (`references/embedded-docs.md`): Find APIs in `node_modules/zudoku/`
-- **Remote Docs Lookup** (`references/remote-docs.md`): Fetch from `https://zudoku.dev/llms.txt`
-- **Troubleshooting** (`references/common-errors.md`): Common errors and solutions
-- **Migrations** (`references/migration-guide.md`): Version upgrade workflows
-
-Main skill file teaches core concepts and routes to appropriate reference files based on user questions.
-
-## Manual installation
+Or clone manually:
 
 ```bash
 git clone https://github.com/zuplo/skills.git
 ```
 
-Then configure your agent to load skills from the cloned directory.
+## Documentation sources
 
-## `.well-known` skills discovery
+All Zuplo skills use the following documentation sources in priority order:
 
-This repository is served via the [RFC 8615 Well-Known URI](https://github.com/cloudflare/agent-skills-discovery-rfc) at `https://zudoku.dev/.well-known/skills/`.
+### 1. Local docs from `node_modules/zuplo/docs/` (preferred)
 
-Agents can discover available skills by fetching:
+The `zuplo` npm package ships with the full Zuplo documentation (642 files, version-matched). Since every Zuplo project has `zuplo` installed, docs are always available locally with no extra setup. Skills instruct agents to read from `node_modules/zuplo/docs/` first.
 
-- **Index**: `https://zudoku.dev/.well-known/skills/index.json`
-- **Skills**: `https://zudoku.dev/.well-known/skills/zudoku/SKILL.md`
+Key paths:
 
-This enables automatic skill discovery without manual configuration.
+| Path | Content |
+| ---- | ------- |
+| `policies/_index.md` | Policy catalog |
+| `policies/{id}/doc.md` | Per-policy docs |
+| `policies/{id}/schema.json` | Per-policy config schema |
+| `handlers/` | Handler docs (url-forward, custom-handler, etc.) |
+| `concepts/` | Core concepts (request lifecycle, project structure) |
+| `articles/` | Guides (CORS, env vars, auth, deployment, etc.) |
+| `articles/monetization/` | Monetization docs |
+| `cli/` | CLI reference |
+| `dev-portal/` | Developer portal / Zudoku docs |
+
+### 2. Zuplo docs MCP server (optional)
+
+For search and Q&A across all docs, add the Zuplo MCP server.
+
+For **Claude Code**, add to `.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "zuplo-docs": {
+      "type": "http",
+      "url": "https://mcp.inkeep.com/zuplo/mcp"
+    }
+  }
+}
+```
+
+### 3. Fetch docs via URL (fallback)
+
+If local docs aren't available and MCP is not configured, skills fall back to fetching from `https://zuplo.com/docs/`.
+
+## Included skills
+
+### Zuplo
+
+| Skill | Description |
+| ----- | ----------- |
+| **zuplo-guide** | Comprehensive gateway guide — documentation lookup, request pipeline, route/policy configuration, custom handlers, deployment. Start here for general Zuplo development. |
+| **zuplo-project-setup** | Step-by-step new project setup — scaffolding, routes, auth, rate limiting, CORS, env vars, backend security, dev portal, deployment. |
+| **zuplo-policies** | Policy configuration — built-in policy catalog, custom code policies, wiring policies to routes. |
+| **zuplo-handlers** | Request handlers — URL forwarding/rewriting, redirects, custom TypeScript handlers, Lambda, WebSockets, MCP servers. |
+| **zuplo-monetization** | API monetization — meters, plans, Stripe billing, subscriptions, usage tracking, private plans, tax collection. |
+| **zuplo-cli** | CLI reference — local dev, deployment, env vars, tunnels, OpenAPI tools, mTLS, project management. |
+
+### Zudoku (Developer Portal)
+
+| Skill | Description |
+| ----- | ----------- |
+| **zudoku-guide** | Comprehensive Zudoku framework guide — setup, configuration, OpenAPI integration, plugins, auth, theming, troubleshooting, migrations. |
 
 ## Contributing
-
-Contributions welcome!
 
 1. Fork the repository
 2. Make improvements to `SKILL.md` files
@@ -68,14 +94,11 @@ Contributions welcome!
 
 ## Resources
 
-- [Zuplo](https://zuplo.com)
-- [Zuplo Docs](https://zuplo.com/docs)
-- [Zudoku Docs](https://zudoku.dev/docs)
-- [Zudoku GitHub](https://github.com/zuplo/zudoku)
+- [Zuplo](https://zuplo.com) / [Zuplo Docs](https://zuplo.com/docs)
+- [Zudoku](https://zudoku.dev) / [Zudoku Docs](https://zudoku.dev/docs)
 - [Agent Skills Spec](https://agentskills.io)
-- [`.well-known` Skills RFC](https://github.com/cloudflare/agent-skills-discovery-rfc)
-- [Discord](https://discord.zudoku.dev)
+- [Discord](https://discord.zuplo.com)
 
 ## License
 
-Apache-2.0 - See [LICENSE](LICENSE) for details
+MIT - See [LICENSE](LICENSE) for details

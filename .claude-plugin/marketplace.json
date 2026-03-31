@@ -2,23 +2,32 @@
   "name": "zuplo-agent-skills",
   "owner": {
     "name": "Zuplo",
-    "email": "team@zuplo.com"
+    "email": "support@zuplo.com"
   },
   "metadata": {
-    "version": "1.0.0"
+    "version": "2.0.0"
   },
   "plugins": [
     {
-      "name": "zudoku-skills",
-      "description": "Comprehensive Zudoku framework skill with progressive disclosure. Teaches documentation lookup (embedded docs from node_modules, remote docs from zudoku.dev/llms.txt), project setup, troubleshooting, and migrations. Single skill for all Zudoku development.",
-      "skills": ["./skills/zudoku"],
+      "name": "zuplo-skills",
+      "description": "Official Zuplo API gateway skills. Includes guides for gateway configuration, project setup, policies, handlers, monetization, and CLI usage. Best used with the Zuplo docs MCP server at https://mcp.inkeep.com/zuplo/mcp.",
+      "skills": [
+        "./skills/zuplo-guide",
+        "./skills/zuplo-project-setup",
+        "./skills/zuplo-policies",
+        "./skills/zuplo-handlers",
+        "./skills/zuplo-monetization",
+        "./skills/zuplo-cli"
+      ],
       "source": "./",
       "strict": false
     },
     {
-      "name": "zuplo-skills",
-      "description": "Comprehensive Zuplo API gateway skill. Teaches documentation lookup (llms.txt, individual doc pages), policy discovery and configuration, route setup, custom handlers, and the request pipeline. Use for all Zuplo development.",
-      "skills": ["./skills/zuplo"],
+      "name": "zudoku-skills",
+      "description": "Comprehensive Zudoku developer portal framework skill. Covers setup, configuration, OpenAPI integration, plugins, auth, theming, troubleshooting, and migrations.",
+      "skills": [
+        "./skills/zudoku-guide"
+      ],
       "source": "./",
       "strict": false
     }
