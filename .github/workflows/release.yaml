@@ -1,9 +1,20 @@
-name: Release Skills
+name: Release
 
 on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Version bump type"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
 permissions:
   contents: write
@@ -15,11 +26,55 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Extract version from tag
+      - name: Determine tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            latest=$(git tag -l 'v*' --sort=-v:refname | head -1)
+            if [ -z "$latest" ]; then
+              latest="v0.0.0"
+            fi
+
+            version="${latest#v}"
+            IFS='.' read -r major minor patch <<< "$version"
+
+            case "${{ inputs.bump }}" in
+              major)
+                major=$((major + 1))
+                minor=0
+                patch=0
+                ;;
+              minor)
+                minor=$((minor + 1))
+                patch=0
+                ;;
+              patch)
+                patch=$((patch + 1))
+                ;;
+            esac
+
+            tag="v${major}.${minor}.${patch}"
+            echo "name=$tag" >> "$GITHUB_OUTPUT"
+            echo "Computed next version: $tag (from $latest, bump: ${{ inputs.bump }})"
+          else
+            echo "name=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+            echo "Tag from push: ${{ github.ref_name }}"
+          fi
+
+      - name: Create and push tag
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git tag "${{ steps.tag.outputs.name }}"
+          git push origin "${{ steps.tag.outputs.name }}"
+          echo "Created tag: ${{ steps.tag.outputs.name }}"
+
+      - name: Extract version
         id: version
         run: |
-          tag="${{ github.ref_name }}"
+          tag="${{ steps.tag.outputs.name }}"
           version="${tag#v}"
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "Version: $version"
@@ -47,16 +102,16 @@ jobs:
           if git diff --cached --quiet; then
             echo "Metadata already up to date"
           else
-            git commit -m "Update metadata for ${{ github.ref_name }}"
+            git commit -m "Update metadata for ${{ steps.tag.outputs.name }}"
             git push origin HEAD:main
             # Move the tag to the new commit
-            git tag -f "${{ github.ref_name }}"
-            git push origin "${{ github.ref_name }}" --force
+            git tag -f "${{ steps.tag.outputs.name }}"
+            git push origin "${{ steps.tag.outputs.name }}" --force
           fi
 
       - name: Build release artifacts
         run: |
-          RELEASE_URL="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}"
+          RELEASE_URL="https://github.com/${{ github.repository }}/releases/download/${{ steps.tag.outputs.name }}"
           ./scripts/build-release.sh "$RELEASE_URL"
 
       - name: Prepare release assets
@@ -76,8 +131,8 @@ jobs:
             [ -f "$f" ] && files+=("$f")
           done
 
-          gh release create "${{ github.ref_name }}" \
-            --title "${{ github.ref_name }}" \
+          gh release create "${{ steps.tag.outputs.name }}" \
+            --title "${{ steps.tag.outputs.name }}" \
             --generate-notes \
             "${files[@]}"
         env:
@@ -102,6 +157,6 @@ jobs:
               repo: 'www',
               event_type: 'sync-agent-skills',
               client_payload: {
-                tag: '${{ github.ref_name }}'
+                tag: '${{ steps.tag.outputs.name }}'
               }
             });
