@@ -13,7 +13,7 @@ Use these sources in priority order:
 
 1. **Local docs (preferred):** Read from `node_modules/zuplo/docs/cli/` — version-matched, always available offline. Check both the project root and parent directories for monorepos.
 2. **MCP server tools:** Use `search-zuplo-docs` and `ask-question-about-zuplo` if the Zuplo MCP server is connected.
-3. **Fetch docs via URL:** Fetch `https://zuplo.com/docs/cli/overview` or discover all pages at `https://zuplo.com/docs/llms.txt`.
+3. **Fetch docs via URL:** Fetch `https://zuplo.com/docs/cli/overview.md` or discover all pages at `https://zuplo.com/docs/llms.txt`.
 
 ## When to Use This Skill
 

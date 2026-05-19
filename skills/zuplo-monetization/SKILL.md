@@ -19,13 +19,13 @@ Before configuring monetization features, read the relevant Zuplo documentation.
 1. **Local docs (preferred):** Read from `node_modules/zuplo/docs/articles/monetization/` — version-matched, always available offline. Check both the project root and parent directories for monorepos.
 2. **MCP server tools:** Use `search-zuplo-docs` and `ask-question-about-zuplo` if the Zuplo MCP server is connected.
 3. **Fetch docs via URL.** Key doc pages:
-- Quickstart: `https://zuplo.com/docs/articles/monetization/quickstart`
-- Stripe integration: `https://zuplo.com/docs/articles/monetization/stripe-integration`
-- Developer portal: `https://zuplo.com/docs/articles/monetization/developer-portal`
-- Subscription lifecycle: `https://zuplo.com/docs/articles/monetization/subscription-lifecycle`
-- Billing models: `https://zuplo.com/docs/articles/monetization/billing-models`
-- Plan examples: `https://zuplo.com/docs/articles/monetization/plan-examples`
-- Monetization policy: `https://zuplo.com/docs/policies/monetization-inbound`
+- Quickstart: `https://zuplo.com/docs/articles/monetization/quickstart.md`
+- Stripe integration: `https://zuplo.com/docs/articles/monetization/stripe-integration.md`
+- Developer portal: `https://zuplo.com/docs/articles/monetization/developer-portal.md`
+- Subscription lifecycle: `https://zuplo.com/docs/articles/monetization/subscription-lifecycle.md`
+- Billing models: `https://zuplo.com/docs/articles/monetization/billing-models.md`
+- Plan examples: `https://zuplo.com/docs/articles/monetization/plan-examples.md`
+- Monetization policy: `https://zuplo.com/docs/policies/monetization-inbound.md`
 
 ## How monetization works
 
@@ -321,5 +321,5 @@ All of these are in `node_modules/zuplo/docs/articles/monetization/`:
 ## Resources
 
 - **Local docs:** `node_modules/zuplo/docs/articles/monetization/` — full monetization documentation
-- **Monetization docs (web):** `https://zuplo.com/docs/articles/monetization`
+- **Monetization docs (web):** `https://zuplo.com/docs/articles/monetization.md`
 - **Setup script:** The [`setup-monetization.sh`](https://github.com/zuplo-samples/monetization-preview/blob/main/scripts/setup-monetization.sh) script automates meter, feature, plan creation, and Stripe connection via the API
