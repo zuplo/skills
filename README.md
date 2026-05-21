@@ -121,6 +121,7 @@ If local docs aren't available and MCP is not configured, skills fall back to fe
 | Skill | Description |
 | ----- | ----------- |
 | **zudoku-guide** | Comprehensive Zudoku framework guide — setup, configuration, OpenAPI integration, plugins, auth, theming, troubleshooting, migrations. |
+| **openapi-zudoku-review** | Review an OpenAPI 3.1 spec for documentation quality and Zudoku portal rendering — produces a severity-grouped findings report and offers to apply the fixes. |
 
 ## Contributing
 

@@ -25,6 +25,7 @@ The **Zuplo Agent Skills** repository provides official agent skills for coding 
 | `skills/zuplo-policies/`     | Policy management guide with complete built-in catalog         |
 | `skills/zuplo-handlers/`     | Request handler configuration and custom handler guide         |
 | `skills/zuplo-cli/`          | Zuplo CLI command reference and usage guide                    |
+| `skills/openapi-zudoku-review/` | OpenAPI 3.1 spec review for documentation quality and Zudoku rendering |
 
 ## Specification
 
