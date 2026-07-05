@@ -176,13 +176,15 @@ zuplo project create --name my-proj --account my-acct
 
 #### `zuplo deploy`
 
-Deploy the current directory. Uses the current git branch name as the environment name by default.
+Deploy the current directory. Uses the current git branch to select the environment by default — the default branch (typically `main`) maps to the production environment. In CI/CD, leave `--environment` unset so the branch being built selects the environment automatically. Only pass `--environment` when there is no git branch to detect (e.g. not in a git repo) or when you deliberately want to deploy to a specific named environment (e.g. deploying a tag to `staging`).
 
 ```bash
-zuplo deploy                                        # Uses git branch as environment name
-zuplo deploy --environment my-env                   # Override environment name
-zuplo deploy --account my-acct --project my-proj    # Explicit account/project
+zuplo deploy                                        # Uses git branch to select the environment
+zuplo deploy --account my-acct --project my-proj    # Explicit account/project (branch selects environment)
+zuplo deploy --environment staging                  # Explicitly target a named environment
 ```
+
+The default branch that maps to the production environment can be changed in the Zuplo portal.
 
 **Polling timeout:** Default polls every 1s for 150s. Override with environment variables:
 
@@ -424,9 +426,23 @@ npx zuplo dev
 
 ### Deploy from CI/CD
 
+Set `ZUPLO_API_KEY` and run `zuplo deploy`. **Do NOT pass `--environment` in normal CI/CD** — the CLI reads the current git branch and maps it to the matching Zuplo environment automatically (the default branch, typically `main`, maps to the production environment). Since CI checks out the branch being built, the correct environment is selected for you.
+
 ```bash
 export ZUPLO_API_KEY=zpka_xxxxx
-npx zuplo deploy --environment production
+npx zuplo deploy --account my-account --project my-project
+```
+
+The default branch (the one that deploys to the production environment) can be changed in the Zuplo portal.
+
+Only pass `--environment` when the branch-based mapping doesn't apply, for example:
+
+- The build isn't running inside a git repo (no branch to detect).
+- You deploy from tags instead of branches and want to target a specific named environment — e.g. deploy a tag to `staging` first, then promote to `production`:
+
+```bash
+export ZUPLO_API_KEY=zpka_xxxxx
+npx zuplo deploy --account my-account --project my-project --environment staging
 ```
 
 ### Connect local dev to remote services
