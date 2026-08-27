@@ -1,0 +1,37 @@
+{
+  "name": "zuplo-tools",
+  "version": "1.0.0",
+  "description": "Official Zuplo and Zudoku skills with documentation and platform MCP servers.",
+  "author": {
+    "name": "Zuplo",
+    "email": "support@zuplo.com",
+    "url": "https://zuplo.com"
+  },
+  "homepage": "https://zuplo.com/docs",
+  "repository": "https://github.com/zuplo/tools",
+  "license": "MIT",
+  "keywords": ["zuplo", "zudoku", "api-gateway", "agent-skills", "mcp"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Zuplo",
+    "shortDescription": "Build and operate APIs with Zuplo.",
+    "longDescription": "Use Zuplo documentation, development workflows, and authenticated platform tools to build, configure, deploy, and troubleshoot APIs and Zudoku developer portals.",
+    "developerName": "Zuplo",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://zuplo.com",
+    "privacyPolicyURL": "https://zuplo.com/legal/privacy-policy",
+    "termsOfServiceURL": "https://zuplo.com/legal/terms",
+    "defaultPrompt": [
+      "Help me build an API with Zuplo.",
+      "Search the Zuplo docs for this problem.",
+      "Review my Zuplo project configuration."
+    ],
+    "brandColor": "#FF00BD",
+    "composerIcon": "./assets/zuplo-mark.svg",
+    "logo": "./assets/zuplo-mark.svg",
+    "logoDark": "./assets/zuplo-mark.svg",
+    "screenshots": []
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "zuplo-docs": {
+      "type": "http",
+      "url": "https://dev.zuplo.com/mcp/docs"
+    },
+    "zuplo-platform": {
+      "type": "http",
+      "url": "https://dev.zuplo.com/mcp",
+      "oauth_resource": "https://dev.zuplo.com/mcp"
+    }
+  }
+}

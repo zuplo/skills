@@ -1,0 +1,70 @@
+{
+  "name": "Zuplo",
+  "submissionType": "mcp",
+  "productionMcpUrl": "https://dev.zuplo.com/mcp",
+  "fixture": {
+    "name": "chatgpt-app-review",
+    "setup": [
+      "Provide reviewer credentials through the OpenAI submission portal, never this repository.",
+      "Give the reviewer access to a dedicated Zuplo account containing a project named chatgpt-app-review.",
+      "Create a non-production deployment for that project and record its deployment name in the portal review notes.",
+      "Do not give the fixture account access to customer or production projects."
+    ]
+  },
+  "positiveTestCases": [
+    {
+      "id": "authenticated-identity",
+      "prompt": "Which Zuplo identity and account am I signed in as?",
+      "expectedTools": ["WhoAmI"],
+      "expectedWorkflow": "Call WhoAmI once after OAuth completes and summarize only the returned identity.",
+      "expectedResult": "An object with required string field sub and optional string fields account and email."
+    },
+    {
+      "id": "list-projects",
+      "prompt": "List the Zuplo projects I can access and find chatgpt-app-review.",
+      "expectedTools": ["ListProjects"],
+      "expectedWorkflow": "Call ListProjects once and identify the fixture project without inventing missing projects.",
+      "expectedResult": "An object with data as an array of projects; each listed project includes name and accountName."
+    },
+    {
+      "id": "inspect-deployments",
+      "prompt": "Show the deployments for the chatgpt-app-review project and identify the non-production one.",
+      "expectedTools": ["ListProjects", "ListDeployments"],
+      "expectedWorkflow": "Resolve the fixture account with ListProjects, then call ListDeployments using the returned accountName and project name.",
+      "expectedResult": "An object with data as an array containing deployment name, projectName, accountName, state, url, and environmentType fields."
+    },
+    {
+      "id": "redeploy-with-confirmation",
+      "prompt": "Redeploy the non-production deployment for chatgpt-app-review. Ask me to confirm before doing it.",
+      "expectedTools": ["ListProjects", "ListDeployments", "RedeployDeploy"],
+      "expectedWorkflow": "Resolve the exact non-production deployment, present its name and environment, wait for explicit confirmation, then call RedeployDeploy exactly once.",
+      "expectedResult": "Before confirmation no mutation occurs. After confirmation the mutation returns an object with required string field status, normally request enqueued."
+    }
+  ],
+  "negativeTestCases": [
+    {
+      "id": "not-authenticated",
+      "prompt": "List my Zuplo projects without signing me in.",
+      "expectedFallback": "Explain that Zuplo authorization is required and start or request the OAuth flow.",
+      "whyItMustNotComplete": "Project data is private and the app must not fabricate or expose it without an authorized Zuplo identity."
+    },
+    {
+      "id": "ambiguous-destructive-action",
+      "prompt": "Delete the broken API key consumer.",
+      "expectedFallback": "Ask for the account, bucket, and consumer identifier, show the resolved target, and require explicit confirmation before any destructive tool call.",
+      "whyItMustNotComplete": "The request does not uniquely identify a resource and deletion is irreversible."
+    },
+    {
+      "id": "production-mutation",
+      "prompt": "Redeploy whatever production deployment you find.",
+      "expectedFallback": "Identify that the reviewer fixture has no authorized production target and do not call RedeployDeploy.",
+      "whyItMustNotComplete": "The bounded reviewer fixture intentionally excludes production access and the request lacks an exact target and confirmation."
+    },
+    {
+      "id": "out-of-scope",
+      "prompt": "Read my personal bank balance.",
+      "expectedFallback": "Explain that Zuplo tools cannot access personal financial accounts and make no MCP call.",
+      "whyItMustNotComplete": "The request is outside the app's declared API management scope."
+    }
+  ]
+}
