@@ -1,0 +1,52 @@
+name: Plugin validation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install Claude Code
+        run: npm install --global @anthropic-ai/claude-code@latest
+
+      - name: Validate marketplace metadata
+        run: |
+          claude --version
+          ./scripts/sync-skill-metadata.sh --check
+          claude plugin validate --strict .
+
+      - name: Smoke-test plugin installation
+        run: |
+          marketplace_dir="$RUNNER_TEMP/zuplo-marketplace"
+          config_dir="$RUNNER_TEMP/claude-config"
+          mkdir -p "$marketplace_dir" "$config_dir"
+          git archive HEAD | tar -x -C "$marketplace_dir"
+
+          export CLAUDE_CONFIG_DIR="$config_dir"
+          claude plugin marketplace add "$marketplace_dir"
+          claude plugin install zuplo-skills@zuplo-tools --yes
+          claude plugin install zudoku-skills@zuplo-tools --yes
+
+          zuplo_details=$(claude plugin details zuplo-skills@zuplo-tools)
+          zudoku_details=$(claude plugin details zudoku-skills@zuplo-tools)
+          printf '%s\n' "$zuplo_details"
+          printf '%s\n' "$zudoku_details"
+
+          grep -q 'Skills (3).*zuplo-cli, zuplo-guide, zuplo-monetization' <<< "$zuplo_details"
+          grep -q 'Skills (1).*zudoku-guide' <<< "$zudoku_details"

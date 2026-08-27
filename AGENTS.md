@@ -20,10 +20,7 @@ The **Zuplo Agent Skills** repository provides official agent skills for coding 
 | `skills/`                    | Agent skill definitions                                        |
 | `skills/zudoku-guide/`       | Single comprehensive Zudoku skill with progressive disclosure  |
 | `skills/zuplo-guide/`        | Comprehensive Zuplo API gateway skill with docs and policies   |
-| `skills/zuplo-project-setup/`| New project setup guide with step-by-step workflows            |
 | `skills/zuplo-monetization/` | API monetization setup, billing, Stripe integration            |
-| `skills/zuplo-policies/`     | Policy management guide with complete built-in catalog         |
-| `skills/zuplo-handlers/`     | Request handler configuration and custom handler guide         |
 | `skills/zuplo-cli/`          | Zuplo CLI command reference and usage guide                    |
 
 ## Specification

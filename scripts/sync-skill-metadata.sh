@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Syncs marketplace.json and README.md with the current skills directory.
-# Ensures all skills are listed and descriptions match SKILL.md frontmatter.
+# Syncs marketplace.json with the current skills directory.
+# Ensures every skill is assigned to the appropriate Claude plugin bundle.
 #
 # Usage:
 #   ./scripts/sync-skill-metadata.sh [--check]
@@ -16,11 +16,18 @@ fi
 
 SKILLS_DIR="skills"
 MARKETPLACE=".claude-plugin/marketplace.json"
-README="README.md"
 
 if [ ! -d "$SKILLS_DIR" ]; then
   echo "Error: Skills directory not found" >&2
   exit 1
+fi
+
+marketplace_output="$MARKETPLACE"
+temporary_marketplace=""
+if [ "$CHECK_ONLY" = true ]; then
+  temporary_marketplace=$(mktemp)
+  marketplace_output="$temporary_marketplace"
+  trap 'rm -f "$temporary_marketplace"' EXIT
 fi
 
 # --- Collect skill metadata ---
@@ -33,17 +40,6 @@ for skill_dir in "$SKILLS_DIR"/*/; do
   [ -f "$skill_dir/SKILL.md" ] || continue
 
   name=$(basename "$skill_dir")
-
-  # Extract description from frontmatter
-  description=$(awk '
-    /^---$/ { fm++; next }
-    fm == 1 && /^description:/ {
-      sub(/^description:[[:space:]]*/, "")
-      gsub(/^["'\''"]|["'\''"]$/, "")
-      print
-      exit
-    }
-  ' "$skill_dir/SKILL.md")
 
   if [[ "$name" == zudoku-* ]]; then
     zudoku_skills+=("$name")
@@ -81,7 +77,9 @@ python3 -c "
 import json
 
 data = {
+    '\$schema': 'https://anthropic.com/claude-code/marketplace.schema.json',
     'name': 'zuplo-tools',
+    'description': 'Official Zuplo and Zudoku skills for building API gateways and developer portals with Claude.',
     'owner': {
         'name': 'Zuplo',
         'email': 'support@zuplo.com'
@@ -92,14 +90,30 @@ data = {
     'plugins': [
         {
             'name': 'zuplo-skills',
+            'displayName': 'Zuplo',
             'description': 'Official Zuplo API gateway skills. Includes guides for gateway configuration, project setup, policies, handlers, monetization, and CLI usage.',
+            'author': {
+                'name': 'Zuplo',
+                'url': 'https://zuplo.com'
+            },
+            'category': 'development',
+            'homepage': 'https://zuplo.com/docs',
+            'repository': 'https://github.com/zuplo/tools',
             'skills': [${zuplo_paths}],
             'source': './',
             'strict': False
         },
         {
             'name': 'zudoku-skills',
+            'displayName': 'Zudoku',
             'description': 'Comprehensive Zudoku developer portal framework skill. Covers setup, configuration, OpenAPI integration, plugins, auth, theming, troubleshooting, and migrations.',
+            'author': {
+                'name': 'Zuplo',
+                'url': 'https://zuplo.com'
+            },
+            'category': 'development',
+            'homepage': 'https://zudoku.dev/docs',
+            'repository': 'https://github.com/zuplo/tools',
             'skills': [${zudoku_paths}],
             'source': './',
             'strict': False
@@ -107,83 +121,21 @@ data = {
     ]
 }
 
-with open('$MARKETPLACE', 'w') as f:
+with open('$marketplace_output', 'w') as f:
     json.dump(data, f, indent=2)
     f.write('\n')
 "
 
-echo "Updated $MARKETPLACE"
-
-# --- Update README skill tables ---
-
-# Build the Zuplo table rows
-zuplo_rows=""
-for s in "${zuplo_skills[@]}"; do
-  desc=$(awk '
-    /^---$/ { fm++; next }
-    fm == 1 && /^description:/ {
-      sub(/^description:[[:space:]]*/, "")
-      gsub(/^["'\''"]|["'\''"]$/, "")
-      # Truncate to first sentence for table
-      sub(/\. .*/, ".")
-      print
-      exit
-    }
-  ' "$SKILLS_DIR/$s/SKILL.md")
-  zuplo_rows+="| **$s** | $desc |
-"
-done
-
-zudoku_rows=""
-for s in "${zudoku_skills[@]}"; do
-  desc=$(awk '
-    /^---$/ { fm++; next }
-    fm == 1 && /^description:/ {
-      sub(/^description:[[:space:]]*/, "")
-      gsub(/^["'\''"]|["'\''"]$/, "")
-      sub(/\. .*/, ".")
-      print
-      exit
-    }
-  ' "$SKILLS_DIR/$s/SKILL.md")
-  zudoku_rows+="| **$s** | $desc |
-"
-done
-
-# --- Update AGENTS.md skill table ---
-
-agents_rows=""
-for skill_dir in "$SKILLS_DIR"/*/; do
-  [ -d "$skill_dir" ] || continue
-  [ -f "$skill_dir/SKILL.md" ] || continue
-  name=$(basename "$skill_dir")
-
-  desc=$(awk '
-    /^---$/ { fm++; next }
-    fm == 1 && /^description:/ {
-      sub(/^description:[[:space:]]*/, "")
-      gsub(/^["'\''"]|["'\''"]$/, "")
-      sub(/\. .*/, ".")
-      # Keep it short for the table
-      if (length > 70) { sub(/.{67}.*/, substr($0, 1, 67) "...") }
-      print
-      exit
-    }
-  ' "$skill_dir/SKILL.md")
-
-  printf -v row '| %-29s| %-63s|' "\`skills/$name/\`" "$desc"
-  agents_rows+="$row
-"
-done
-
-echo "Metadata sync complete."
-
 if [ "$CHECK_ONLY" = true ]; then
-  if git diff --quiet -- "$MARKETPLACE"; then
-    echo "All files up to date."
+  if cmp -s "$MARKETPLACE" "$temporary_marketplace"; then
+    echo "Marketplace metadata is up to date."
   else
     echo "Files are out of date. Run ./scripts/sync-skill-metadata.sh to update."
-    git diff --stat -- "$MARKETPLACE"
+    diff -u "$MARKETPLACE" "$temporary_marketplace" || true
     exit 1
   fi
+else
+  echo "Updated $MARKETPLACE"
 fi
+
+echo "Metadata sync complete."

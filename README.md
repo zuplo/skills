@@ -29,8 +29,9 @@ Install via **Cursor Settings > Rules > Add Rule > Remote Rule (GitHub)** and en
 ```
 .cursor/skills/
 ├── zuplo-guide/SKILL.md
-├── zuplo-project-setup/SKILL.md
-└── ...
+├── zuplo-cli/SKILL.md
+├── zuplo-monetization/SKILL.md
+└── zudoku-guide/SKILL.md
 ```
 
 Skills in `.cursor/skills/`, `.agents/skills/`, or `~/.cursor/skills/` are auto-discovered.
@@ -143,6 +144,18 @@ If local docs aren't available and MCP is not configured, skills fall back to fe
 2. Make improvements to `SKILL.md` files
 3. Test with actual development workflows
 4. Submit a pull request
+
+## Security, privacy, and support
+
+The Claude marketplace entries install static skill instructions only; they do
+not automatically connect an MCP server. The portable Agent Plugins package
+also advertises the public Zuplo Docs MCP server and the OAuth-protected Zuplo
+Platform MCP server for clients that support `mcp.json`.
+
+When a user chooses to connect either server, requests are handled under
+Zuplo's [Privacy Policy](https://zuplo.com/legal/privacy-policy) and
+[Terms](https://zuplo.com/legal/terms). For product support or to report a
+security concern, contact [support@zuplo.com](mailto:support@zuplo.com).
 
 ## Resources
 
