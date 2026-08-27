@@ -22,10 +22,12 @@ if [ ! -d "$SKILLS_DIR" ]; then
   exit 1
 fi
 
-marketplace_before=""
+marketplace_output="$MARKETPLACE"
+temporary_marketplace=""
 if [ "$CHECK_ONLY" = true ]; then
-  marketplace_before=$(mktemp)
-  cp "$MARKETPLACE" "$marketplace_before"
+  temporary_marketplace=$(mktemp)
+  marketplace_output="$temporary_marketplace"
+  trap 'rm -f "$temporary_marketplace"' EXIT
 fi
 
 # --- Collect skill metadata ---
@@ -119,24 +121,21 @@ data = {
     ]
 }
 
-with open('$MARKETPLACE', 'w') as f:
+with open('$marketplace_output', 'w') as f:
     json.dump(data, f, indent=2)
     f.write('\n')
 "
 
-echo "Updated $MARKETPLACE"
-
-echo "Metadata sync complete."
-
 if [ "$CHECK_ONLY" = true ]; then
-  if cmp -s "$marketplace_before" "$MARKETPLACE"; then
-    rm "$marketplace_before"
+  if cmp -s "$MARKETPLACE" "$temporary_marketplace"; then
     echo "Marketplace metadata is up to date."
   else
     echo "Files are out of date. Run ./scripts/sync-skill-metadata.sh to update."
-    diff -u "$marketplace_before" "$MARKETPLACE" || true
-    cp "$marketplace_before" "$MARKETPLACE"
-    rm "$marketplace_before"
+    diff -u "$MARKETPLACE" "$temporary_marketplace" || true
     exit 1
   fi
+else
+  echo "Updated $MARKETPLACE"
 fi
+
+echo "Metadata sync complete."
