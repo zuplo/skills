@@ -82,15 +82,26 @@ jobs:
       - name: Sync skill metadata
         run: ./scripts/sync-skill-metadata.sh
 
-      - name: Update marketplace.json version
+      - name: Update manifest versions
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
           python3 -c "
-          import json
+          import json, os
+          version = os.environ['VERSION']
+
           with open('.claude-plugin/marketplace.json', 'r') as f:
-              data = json.load(f)
-          data['metadata']['version'] = '${{ steps.version.outputs.version }}'
+              marketplace = json.load(f)
+          marketplace['metadata']['version'] = version
           with open('.claude-plugin/marketplace.json', 'w') as f:
-              json.dump(data, f, indent=2)
+              json.dump(marketplace, f, indent=2)
+              f.write('\n')
+
+          with open('plugin.json', 'r') as f:
+              plugin = json.load(f)
+          plugin['version'] = version
+          with open('plugin.json', 'w') as f:
+              json.dump(plugin, f, indent=2)
               f.write('\n')
           "
 
