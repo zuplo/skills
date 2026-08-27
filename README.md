@@ -4,6 +4,12 @@ Official [agent skills](https://agentskills.io) for [Zuplo](https://zuplo.com) a
 
 This repository is also an [Agent Plugins 1.0.0](https://agent-plugins.org/specification) package. Clients that support Agent Plugins discover the skills in `skills/` and the Zuplo Docs and Platform MCP servers in [`mcp.json`](./mcp.json) from the root [`plugin.json`](./plugin.json) manifest.
 
+For Codex, the repository also includes an OpenAI plugin manifest at
+[`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) and MCP configuration
+at [`.mcp.json`](./.mcp.json). The same MCP servers power the Zuplo ChatGPT app;
+see the [ChatGPT app guide](./CHATGPT_APP.md) for testing, the remaining
+registered-connection and privacy prerequisites, and public submission.
+
 ## Installation
 
 ### Claude Code
@@ -42,7 +48,14 @@ Or use the `/create-skill` command in Copilot chat and reference this repo's ski
 
 ### Codex (OpenAI)
 
-Codex reads `AGENTS.md` at the repo root. Add the Zuplo `AGENTS.md` to your project for project-level context.
+The OpenAI plugin package combines all included skills with the Zuplo Docs and
+Platform MCP servers. Clone this repository for local Codex development. To
+test the ChatGPT app, register the MCP endpoints directly in ChatGPT Developer
+Mode. See the [ChatGPT app guide](./CHATGPT_APP.md) for the endpoints, test
+cases, and submission requirements.
+
+Codex also reads `AGENTS.md` at the repo root. Add the Zuplo `AGENTS.md` to your
+project for project-level context.
 
 ### Using the `skills` CLI
 

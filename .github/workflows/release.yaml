@@ -103,7 +103,17 @@ jobs:
           with open('plugin.json', 'w') as f:
               json.dump(plugin, f, indent=2)
               f.write('\n')
+
+          with open('.codex-plugin/plugin.json', 'r') as f:
+              openai_plugin = json.load(f)
+          openai_plugin['version'] = version
+          with open('.codex-plugin/plugin.json', 'w') as f:
+              json.dump(openai_plugin, f, indent=2)
+              f.write('\n')
           "
+
+      - name: Check plugin manifests
+        run: python3 scripts/check-plugin-manifests.py
 
       - name: Commit metadata updates
         run: |
