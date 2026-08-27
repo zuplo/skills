@@ -2,6 +2,8 @@
 
 Official [agent skills](https://agentskills.io) for [Zuplo](https://zuplo.com) and [Zudoku](https://zudoku.dev). These skills help AI coding assistants correctly configure and develop with the Zuplo API gateway and the Zudoku documentation framework.
 
+This repository is also an [Agent Plugins 1.0.0](https://agent-plugins.org/specification) package. Clients that support Agent Plugins discover the skills in `skills/` and the Zuplo Docs and Platform MCP servers in [`mcp.json`](./mcp.json) from the root [`plugin.json`](./plugin.json) manifest.
+
 ## Installation
 
 ### Claude Code

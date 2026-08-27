@@ -1,0 +1,14 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "zuplo-tools",
+  "version": "1.0.0",
+  "description": "Official Zuplo and Zudoku agent skills with Zuplo MCP server connections.",
+  "author": {
+    "name": "Zuplo",
+    "url": "https://zuplo.com"
+  },
+  "homepage": "https://zuplo.com/docs",
+  "repository": "https://github.com/zuplo/tools",
+  "license": "MIT",
+  "keywords": ["zuplo", "zudoku", "api-gateway", "agent-skills", "mcp"]
+}
