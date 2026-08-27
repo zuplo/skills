@@ -1,5 +1,7 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "zuplo-tools",
+  "description": "Official Zuplo and Zudoku skills for building API gateways and developer portals with Claude.",
   "owner": {
     "name": "Zuplo",
     "email": "support@zuplo.com"
@@ -10,7 +12,15 @@
   "plugins": [
     {
       "name": "zuplo-skills",
+      "displayName": "Zuplo",
       "description": "Official Zuplo API gateway skills. Includes guides for gateway configuration, project setup, policies, handlers, monetization, and CLI usage.",
+      "author": {
+        "name": "Zuplo",
+        "url": "https://zuplo.com"
+      },
+      "category": "development",
+      "homepage": "https://zuplo.com/docs",
+      "repository": "https://github.com/zuplo/tools",
       "skills": [
         "./skills/zuplo-cli",
         "./skills/zuplo-guide",
@@ -21,7 +31,15 @@
     },
     {
       "name": "zudoku-skills",
+      "displayName": "Zudoku",
       "description": "Comprehensive Zudoku developer portal framework skill. Covers setup, configuration, OpenAPI integration, plugins, auth, theming, troubleshooting, and migrations.",
+      "author": {
+        "name": "Zuplo",
+        "url": "https://zuplo.com"
+      },
+      "category": "development",
+      "homepage": "https://zudoku.dev/docs",
+      "repository": "https://github.com/zuplo/tools",
       "skills": [
         "./skills/zudoku-guide"
       ],
