@@ -1,6 +1,6 @@
 ---
 name: zuplo-guide
-description: "Comprehensive Zuplo API gateway guide. Teaches how to find current documentation, understand the request pipeline, configure routes and policies, write custom handlers, and manage deployments. Covers documentation lookup strategies (llms.txt, individual doc pages), core concepts (OpenAPI-as-config, policy pipeline, web standards runtime), and all built-in policies. Use this skill for all Zuplo development to ensure correct configuration from official docs."
+description: "Comprehensive Zuplo API gateway guide for building, configuring, and deploying programmable API gateways. Covers route configuration in routes.oas.json, API authentication (API keys, JWT, OAuth), rate limiting, request/response policies, custom handlers, CORS setup, API proxy forwarding, environment variables, and deployment. Teaches documentation lookup strategies, the OpenAPI-as-config model, policy pipeline architecture, and web standards runtime. Use this skill for all Zuplo API management, API proxy setup, rate limiting configuration, API key authentication, and policy configuration."
 license: MIT
 metadata:
   author: Zuplo
@@ -12,11 +12,9 @@ metadata:
 
 Build and manage programmable API gateways with Zuplo. This skill teaches you how to find current documentation and correctly configure Zuplo projects.
 
-## Critical rule: Read docs before configuring
+## Critical rule: Always read docs before configuring
 
-Before configuring ANY Zuplo feature (policies, handlers, routes, CORS, rate limiting, auth, etc.), you MUST read the relevant documentation first. Do not rely on training data for Zuplo-specific configuration. The docs are the source of truth for correct configuration format, required fields, and available options.
-
-If you skip this step and produce incorrect configuration, it will break the user's project.
+Before configuring ANY Zuplo feature, read the relevant documentation first. Do not rely on training data — the docs are the source of truth for configuration format, required fields, and available options.
 
 ## How to look up Zuplo documentation
 
@@ -42,13 +40,13 @@ Use the following sources in priority order:
 | Programmable API reference | `programmable-api/` |
 | Guides | `guides/` |
 
-## Core concepts (summary)
+## Core concepts
 
-Zuplo is a **programmable API gateway** built on **web standards**. Key principles:
+Zuplo is a **programmable API gateway** deployed at the edge. Key Zuplo-specific principles:
 
 - **OpenAPI-as-config** — `routes.oas.json` is both the API spec and the routing config
-- **Web Standards First** — Uses `Request`, `Response`, `Headers`, `fetch()`, Web Crypto, Streams (no Node.js APIs)
-- **Policy Pipeline** — Composable middleware that snaps into a request/response pipeline
+- **Policy Pipeline** — Composable middleware that snaps into a request/response pipeline (inbound policies run before the handler, outbound after)
+- **Web Standards Runtime** — Uses standard web APIs (`Request`, `Response`, `fetch`) — no Node.js APIs
 - **Edge-Native** — Global edge deployment by default
 
 ### Project structure
@@ -84,16 +82,79 @@ import {
 
 For full details on handlers, runtime objects, caching, authentication, and deployment models, read the docs in `node_modules/zuplo/docs/concepts/`.
 
+## Route configuration example
+
+A route in `config/routes.oas.json` with API key auth and rate limiting policies:
+
+```json
+{
+  "paths": {
+    "/v1/todos": {
+      "get": {
+        "summary": "List todos",
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://api.example.com"
+            }
+          },
+          "policies": {
+            "inbound": ["api-key-inbound", "rate-limit-inbound"]
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Policy configuration example
+
+Policies are defined in `config/policies.json`. Routes reference policies by name.
+
+```json
+[
+  {
+    "name": "api-key-inbound",
+    "policyType": "api-key-inbound",
+    "handler": {
+      "export": "ApiKeyInboundPolicy",
+      "module": "$import(@zuplo/runtime)",
+      "options": {}
+    }
+  },
+  {
+    "name": "rate-limit-inbound",
+    "policyType": "rate-limit-inbound",
+    "handler": {
+      "export": "RateLimitInboundPolicy",
+      "module": "$import(@zuplo/runtime)",
+      "options": {
+        "rateLimitBy": "user",
+        "requestsAllowed": 100,
+        "timeWindowMinutes": 1
+      }
+    }
+  }
+]
+```
+
+Look up all built-in policies in `node_modules/zuplo/docs/policies/_index.md`, then read the specific policy's `doc.md` and `schema.json` for exact configuration options.
+
 ## When you see errors
 
-1. Read the relevant doc page for the feature causing the error (check `node_modules/zuplo/docs/` first)
+1. Read the relevant doc page (check `node_modules/zuplo/docs/` first)
 2. Verify configuration matches the documented format exactly
 3. Check that all required fields are present
-4. For build failures, check deployment logs for specific error messages
+4. Run `npx zuplo test` to validate, and check deployment logs for specific error messages
 
 ## Development workflow
 
-1. **Read the docs** for the feature you're configuring — check `node_modules/zuplo/docs/` or use MCP tools
-2. **Check available policies** — read `node_modules/zuplo/docs/policies/_index.md` for the full list, then the specific policy's `doc.md` for configuration
-3. **Write configuration** based on current docs (never from memory)
-4. **Verify the build** succeeded after saving changes
+1. **Look up docs** for the feature you're configuring (see documentation sources above)
+2. **Check available policies** in `node_modules/zuplo/docs/policies/_index.md`, then read the specific policy's `doc.md`
+3. **Write configuration** based on current docs
+4. **Validate locally** by running `npx zuplo dev` for local development or `npx zuplo test` to run tests. If tests fail, read the error output, fix the configuration, and re-run before deploying
+5. **Deploy** with `npx zuplo deploy` and verify with `npx zuplo list` that the deployment succeeded
