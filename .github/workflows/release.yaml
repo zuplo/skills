@@ -35,6 +35,7 @@ jobs:
           repositories: |
             ${{ github.event.repository.name }}
             www
+          permission-contents: write
 
       - name: Checkout
         uses: actions/checkout@v4
