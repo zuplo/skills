@@ -1,6 +1,6 @@
 ---
 name: zudoku-guide
-description: "Comprehensive Zudoku framework guide. Teaches how to find current documentation, verify API signatures, and build API documentation sites and developer portals. Covers documentation lookup strategies (embedded docs, remote docs), core concepts (configuration, navigation, OpenAPI integration, plugins, authentication, theming), and common patterns. Use this skill for all Zudoku development to ensure you're using current APIs from the installed version or latest documentation."
+description: "Use when building or maintaining a Zudoku API documentation site or developer portal, including configuration, navigation, OpenAPI integration, plugins, authentication, theming, and common patterns. Teaches how to find current documentation (embedded docs, remote docs) and verify API signatures so the code matches the installed Zudoku version rather than training data."
 license: MIT
 metadata:
   author: Zuplo

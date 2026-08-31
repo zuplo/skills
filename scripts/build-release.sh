@@ -56,6 +56,20 @@ for skill_dir in "$SKILLS_SRC"/*/; do
     description="$name skill"
   fi
 
+  # zuplo.com serves this index at /.well-known/agent-skills/index.json, and its
+  # consumers (agent-readiness scanners, zuplo/www's sync script) require every
+  # description to open with explicit when-to-use guidance. Fail here rather than
+  # shipping a release that breaks the downstream sync.
+  if [[ "$description" != "Use when "* ]]; then
+    echo "Error: $name description must start with \"Use when \" — got: $description" >&2
+    exit 1
+  fi
+
+  if [ "${#description}" -le 80 ]; then
+    echo "Error: $name description must exceed 80 characters (got ${#description})" >&2
+    exit 1
+  fi
+
   # Determine type: archive if there are extra directories, skill-md otherwise
   has_extras=false
   for sub in "$skill_dir"*/; do
