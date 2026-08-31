@@ -1,6 +1,6 @@
 ---
 name: zuplo-guide
-description: "Comprehensive Zuplo API gateway guide. Teaches how to find current documentation, understand the request pipeline, configure routes and policies, write custom handlers, and manage deployments. Covers documentation lookup strategies (llms.txt, individual doc pages), core concepts (OpenAPI-as-config, policy pipeline, web standards runtime), and all built-in policies. Use this skill for all Zuplo development to ensure correct configuration from official docs."
+description: "Use when building or maintaining a Zuplo API gateway project, including configuring routes and policies, writing custom handlers, understanding the request pipeline, and managing deployments. Covers documentation lookup strategies (llms.txt, individual doc pages), core concepts (OpenAPI-as-config, policy pipeline, web standards runtime), and all built-in policies, so configuration comes from official docs."
 license: MIT
 metadata:
   author: Zuplo

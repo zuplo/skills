@@ -1,6 +1,6 @@
 ---
 name: zuplo-monetization
-description: "Complete guide to Zuplo's API monetization product. Covers setup of meters, features, plans, Stripe integration, the monetization policy, developer portal monetization plugin, subscription lifecycle, private plans, tax collection, billing models, and troubleshooting. Use when a developer wants to monetize their API, set up billing, configure usage-based pricing, manage subscriptions, or integrate Stripe with Zuplo."
+description: "Use when monetizing an API with Zuplo, including setting up meters, features, and plans, integrating Stripe, configuring the monetization policy and the developer portal monetization plugin, managing the subscription lifecycle and private plans, collecting tax, choosing billing models, and troubleshooting usage-based pricing and billing."
 license: MIT
 metadata:
   author: Zuplo

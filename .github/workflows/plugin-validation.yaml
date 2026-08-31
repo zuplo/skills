@@ -31,6 +31,9 @@ jobs:
           ./scripts/sync-skill-metadata.sh --check
           claude plugin validate --strict .
 
+      - name: Validate discovery index
+        run: ./scripts/build-release.sh https://example.invalid/placeholder
+
       - name: Smoke-test plugin installation
         run: |
           marketplace_dir="$RUNNER_TEMP/zuplo-marketplace"

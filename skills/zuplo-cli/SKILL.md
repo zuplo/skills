@@ -1,6 +1,6 @@
 ---
 name: zuplo-cli
-description: Zuplo CLI helper for developing and managing Zuplo API Gateway projects. Use when the user wants to run zuplo CLI commands, deploy, manage environment variables, set up tunnels, run tests, initialize projects, work with OpenAPI specs, or do local development with the Zuplo platform.
+description: "Use when running Zuplo CLI commands to develop or manage a Zuplo API Gateway project, including initializing projects, local development, working with OpenAPI specs, running tests, deploying, managing environment variables, and setting up tunnels."
 ---
 
 # Zuplo CLI
