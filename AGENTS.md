@@ -24,6 +24,7 @@ The **Zuplo Agent Skills** repository provides official agent skills for coding 
 | `skills/zuplo-cli/`          | Zuplo CLI command reference and usage guide                    |
 | `skills/zuplo-project-setup/`| Guided gateway setup — starting point, then the core policies   |
 | `skills/zuplo-graphql/`      | GraphQL endpoint — proxy route plus Zudoku docs plugin          |
+| `skills/zuplo-ai-gateway/`   | AI Gateway — providers, teams, apps, policy chains, budgets     |
 
 ## Specification
 

@@ -31,6 +31,7 @@ Install via **Cursor Settings > Rules > Add Rule > Remote Rule (GitHub)** and en
 ├── zuplo-guide/SKILL.md
 ├── zuplo-cli/SKILL.md
 ├── zuplo-project-setup/SKILL.md
+├── zuplo-ai-gateway/SKILL.md
 ├── zuplo-graphql/SKILL.md
 ├── zuplo-monetization/SKILL.md
 └── zudoku-guide/SKILL.md
@@ -135,6 +136,7 @@ If local docs aren't available and MCP is not configured, skills fall back to fe
 | **zuplo-cli** | CLI reference — local dev, deployment, env vars, tunnels, OpenAPI tools, mTLS, project management. |
 | **zuplo-project-setup** | Guided setup for a new or unconfigured gateway — starting point (template, OpenAPI import, or scratch), then API key auth, rate limiting, CORS, and JWT validation in order. |
 | **zuplo-graphql** | GraphQL endpoints — the `x-graphql` proxy route plus the Zudoku GraphQL documentation plugin, which must be set up together. |
+| **zuplo-ai-gateway** | AI Gateway — providers, teams and apps, `providerLabel/model` addressing, an app's policy chain and request URL, cascading budgets, and diagnosing a rejected AI request. |
 
 ### Zudoku (Developer Portal)
 
