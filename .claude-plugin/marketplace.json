@@ -23,8 +23,10 @@
       "repository": "https://github.com/zuplo/tools",
       "skills": [
         "./skills/zuplo-cli",
+        "./skills/zuplo-graphql",
         "./skills/zuplo-guide",
-        "./skills/zuplo-monetization"
+        "./skills/zuplo-monetization",
+        "./skills/zuplo-project-setup"
       ],
       "source": "./",
       "strict": false
