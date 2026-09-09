@@ -22,9 +22,12 @@
       "homepage": "https://zuplo.com/docs",
       "repository": "https://github.com/zuplo/tools",
       "skills": [
+        "./skills/zuplo-ai-gateway",
         "./skills/zuplo-cli",
+        "./skills/zuplo-graphql",
         "./skills/zuplo-guide",
-        "./skills/zuplo-monetization"
+        "./skills/zuplo-monetization",
+        "./skills/zuplo-project-setup"
       ],
       "source": "./",
       "strict": false
